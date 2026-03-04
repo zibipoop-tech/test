@@ -1,0 +1,12 @@
+Artifact,Command to Run,Abnormal to See,Normal to See,What Value It Gives About Privilege Escalation
+Sudo privileges,"sudo -l","User able to run unexpected commands as root","Known allowed commands","Shows which accounts can escalate privileges"
+SUID binaries,"find / -perm -4000 -type f 2>/dev/null","Unknown SUID binary in unusual directories","System SUID binaries like sudo, passwd","Potential for privilege abuse via binary"
+Writable SUID binaries,"find / -perm -4000 -type f -writable 2>/dev/null","SUID binaries that attacker can modify","None","Vulnerable SUID binaries can allow root takeover"
+World-writable files owned by root,"find / -xdev -type f -perm -002 -user root","Files that could be replaced to escalate privileges","None","May allow privilege escalation via file replacement"
+Kernel exploits check,"dmesg | grep -i segfault","Crashes after local exploits or after sudo attempt","Occasional system crashes","Detects exploit-based privilege escalation attempts"
+Sudo logs,"grep sudo /var/log/auth.log","User executing commands not allowed","Known admin commands","Confirms escalation attempts"
+Environmental manipulation,"env | grep LD_PRELOAD","LD_PRELOAD pointing to unusual libraries","Not set or only standard variables","May allow library injection to gain root"
+Crontab with root,"sudo crontab -l","Root cron running unknown script","Known scheduled tasks","Shows escalation via cron abuse"
+Running processes with root,"ps aux | grep root","Suspicious process owned by root launched by normal user","Normal root processes like system services","Detects escalated process created by attacker"
+Kernel module inspection,"lsmod","Unknown kernel module loaded","Standard kernel modules","Rootkit or privilege escalation via kernel module"
+Package misconfigurations,"dpkg -l or rpm -qa","Vulnerable package allowing local privilege escalation","Updated packages","Indicates exploitation potential"
